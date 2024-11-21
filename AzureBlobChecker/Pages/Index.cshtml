@@ -1,0 +1,65 @@
+﻿@page
+@model AzureBlobChecker.Pages.IndexModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузить изображение</title>
+</head>
+<body>
+
+    <h2>Загрузить изображение в Blob Storage</h2>
+
+    <!-- Форма для загрузки файла -->
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="file">Выберите изображение</label>
+            <input type="file" class="form-control" id="file" name="file" onchange="previewImage(event)" />
+        </div>
+        <button type="submit" class="btn btn-primary">Загрузить фото</button>
+    </form>
+
+    <div id="imagePreview" style="display:none;">
+        <h3>Предпросмотр изображения:</h3>
+        <img id="preview" width="200" />
+    </div>
+
+    <!-- Отображение загруженной картинки -->
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <div>
+            <h3>Загруженная картинка:</h3>
+            <img src="@Model.ImageUrl" alt="Uploaded Image" width="200" />
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <div>
+            <h3>Загруженная картинка: НЕ ДУБЛЬ(ПРОВЕРКА)</h3>
+            <img src="@Model.ImageUrl" alt="Uploaded Image" width="200" />
+        </div>
+    }
+    else
+    {
+        <p>Изображение не загружено.</p>
+    }
+
+    <script>
+        // Функция для предпросмотра картинки перед загрузкой
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const preview = document.getElementById('preview');
+                preview.src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+
+</body>
+</html>
